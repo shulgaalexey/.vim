@@ -6,7 +6,7 @@
 " Script: http://www.vim.org/scripts/script.php?script_id=
 " Copyright:    © 2014 by Christian Brabandt
 "               The VIM LICENSE applies to ShowWhite.vim
-"               (see |copyright|) except use "ShowWhite.vim" 
+"               (see |copyright|) except use "ShowWhite.vim"
 "               instead of "Vim". No warranty, express or implied.
 "               *** ***   Use At-Your-Own-Risk!   *** ***
 " GetLatestVimScripts:  5043 2 :AutoInstall: showwhite.vim
@@ -102,7 +102,8 @@ fun! showwhite#Init() "{{{1
         endif
     endif
     let b:showwhite_toggle = !get(b:, 'showwhite_toggle', 0)
-endfun 
+endfun
 
 " Modeline {{{1
 " vim: ts=4 sts=4 fdm=marker com+=l\:\" fdl=0 et
+
