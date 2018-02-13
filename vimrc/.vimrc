@@ -183,10 +183,15 @@ let NERDTreeWinPos = "left"
 
 
 
-set tabstop=8
-set softtabstop=8
-set shiftwidth=8
-set noexpandtab
+"set tabstop=8
+"set softtabstop=8
+"set shiftwidth=8
+"set noexpandtab
+
+let tabsize = 2
+execute "set tabstop=".tabsize
+execute "set shiftwidth=".tabsize
+execute "set softtabstop=".tabsize
 
 "augroup project
 "	autocmd!
