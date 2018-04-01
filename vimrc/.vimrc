@@ -180,7 +180,7 @@ let g:SrcExpl_nextDefKey = "<F4>"
 "nmap <silent> <C-n> :NERDTreeToggle<CR>
 nnoremap <F8> :NERDTreeToggle<CR>
 let NERDTreeWinPos = "left"
-
+let NERDTreeShowHidden=1
 
 
 "set tabstop=8
