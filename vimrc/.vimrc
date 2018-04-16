@@ -1,20 +1,74 @@
+" All system-wide defaults are set in $VIMRUNTIME/debian.vim and sourced by
+" the call to :runtime you can find below.  If you wish to change any of those
+" settings, you should do it in this file (/etc/vim/vimrc), since debian.vim
+" will be overwritten everytime an upgrade of the vim packages is performed.
+" It is recommended to make changes after sourcing debian.vim since it alters
+" the value of the 'compatible' option.
+
+" This line should not be removed as it ensures that various options are
+" properly set to work with the Vim-related packages available in Debian.
+runtime! debian.vim
+
+" Pathogen
 execute pathogen#infect()
+call pathogen#helptags() " generate helptags for everything in 'runtimepath'
 syntax on
 filetype plugin indent on
 
-set exrc
+
+" Uncomment the next line to make Vim more Vi-compatible
+" NOTE: debian.vim sets 'nocompatible'.  Setting 'compatible' changes numerous
+" options, so any other options should be set AFTER setting 'compatible'.
+"set compatible
+set nocompatible
+"set exrc
 set secure
 
-set nocompatible
+" Vim5 and later versions support syntax highlighting. Uncommenting the next
+" line enables syntax highlighting by default.
+if has("syntax")
+  syntax on
+endif
+
+" If using a dark background within the editing area and syntax highlighting
+" turn on this option as well
+set background=dark
+
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" Uncomment the following to have Vim load indentation rules and plugins
+" according to the detected filetype.
+"if has("autocmd")
+"  filetype plugin indent on
+"endif
+
+" The following are commented out as they cause vim to behave a lot
+" differently from regular Vi. They are highly recommended though.
+"set showcmd		" Show (partial) command in status line.
+"set showmatch		" Show matching brackets.
+"set ignorecase		" Do case insensitive matching
+"set smartcase		" Do smart case matching
+"set incsearch		" Incremental search
+"set autowrite		" Automatically save before commands like :next and :make
+"set hidden		" Hide buffers when they are abandoned
+"set mouse=a		" Enable mouse usage (all modes)
+
+" Source a global configuration file if available
+"if filereadable("/etc/vim/vimrc.local")
+"  source /etc/vim/vimrc.local
+"endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "     RECOMMENDED SETTINGS
 "     from http://vim.wikia.com/wiki/Example_vimrc "
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"syntax on
 
-set cindent " c indentation
+"set cindent " c indentation
 
 set hidden
 set confirm
@@ -27,6 +81,8 @@ set confirm
 set number
 
 set hlsearch      " Get borred of all yellow, use :nohlsearch to turn it off for a moment
+
+set history=200
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -48,6 +104,7 @@ set encoding=utf8
 set ffs=unix,dos,mac
 
 
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Files, backups and undo
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -58,12 +115,12 @@ set noswapfile
 
 
 " Return to last edit position when opening files (You want this!)
-autocmd BufReadPost *
-     \ if line("'\"") > 0 && line("'\"") <= line("$") |
-     \   exe "normal! g`\"" |
-     \ endif
+"autocmd BufReadPost *
+"     \ if line("'\"") > 0 && line("'\"") <= line("$") |
+"     \   exe "normal! g`\"" |
+"     \ endif
 " Remember info about open buffers on close
-set viminfo^=%
+"set viminfo^=%
 
 
 " Delete trailing white space on save, useful for Python and CoffeeScript ;)
@@ -80,6 +137,7 @@ func! DeleteTrailingWS()
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Spell checking
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Pressing ,ss will toggle and untoggle spell checking
 nnoremap <F6> :setlocal spell!<CR>
 
 highlight ExtraWhitespace ctermbg=red guibg=red
@@ -89,131 +147,6 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"
-" Setting VIM as C/C++ IDE
-" http://www.alexeyshmalko.com/2014/using-vim-as-c-cpp-ide/ "
-" set security options, so local .vimrc can not do all what main .vimrc can
-set exrc
-set secure
-
-" Display line numbers on the left
-set number
-"
-"----------------------------------------------------
-"
-" Settings for local .vimrc, which is in the root of the project
-
-" highlight fields for code
-set colorcolumn=80
-highlight ColorColumn ctermbg=darkgray
-
-" rename .vim/plugins/linuxsty.bim into .linuxsty.vim for highlighting
-" violations of Linux Kernel coding style
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" TagList - Source Insignt
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" The switch of the Tag List
-nmap <F10> :TlistToggle<CR>
-"nmap <F10> :TlistOpen<CR>
-let Tlist_Use_Right_Window = 1
-let Tlist_WinWidth = 70
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" SrcExpl - Source Insignt
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" The switch of the Source Explorer
-"nmap <F9> :SrcExplToggle<CR>
-nmap <F9> :SrcExpl<CR>
-
-" Set the height of Source Explorer window
-let g:SrcExpl_winHeight = 10
-
-" Set 100 ms for refreshing the Source Explorer
-let g:SrcExpl_refreshTime = 100
-
-" Set "Enter" key to jump into the exact definition context
-let g:SrcExpl_jumpKey = "<ENTER>"
-
-" Set "Space" key for back from the definition context
-let g:SrcExpl_gobackKey = "<SPACE>"
-
-
-" In order to avoid conflicts, the Source Explorer should know what plugins
-" except itself are using buffers. And you need add their buffer names into
-" below listaccording to the command ":buffers!"
-let g:SrcExpl_pluginList = [
-         \ "__Tag_List__",
-         \ "_NERD_tree_"
-     \ ]
-
-" Enable/Disable the local definition searching, and note that this is not
-" guaranteed to work, the Source Explorer doesn't check the syntax for now.
-" It only searches for a match with the keyword according to command 'gd'
-let g:SrcExpl_searchLocalDef = 1
-
-" Do not let the Source Explorer update the tags file when opening
-" let g:SrcExpl_isUpdateTags = 0
-"
-" Use 'Exuberant Ctags' with '--sort=foldcase -R .' or '-L cscope.files' to
-" create/update a tags file
-" let g:SrcExpl_updateTagsCmd = "ctags --sort=foldcase -R ."
-
-" Set "<F12>" key for updating the tags file artificially
-"cet g:SrcExpl_updateTagsKey = "<F12>"
-
-" Set "<F3>" key for displaying the previous definition in the jump list
-let g:SrcExpl_prevDefKey = "<F3>"
-
-" Set "<F4>" key for displaying the next definition in the jump list
-let g:SrcExpl_nextDefKey = "<F4>"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" NERDTree
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-"nmap <silent> <C-n> :NERDTreeToggle<CR>
-nnoremap <F8> :NERDTreeToggle<CR>
-let NERDTreeWinPos = "left"
-let NERDTreeShowHidden=1
-
-
-"set tabstop=8
-"set softtabstop=8
-"set shiftwidth=8
-"set noexpandtab
-
-let tabsize = 2
-execute "set tabstop=".tabsize
-execute "set shiftwidth=".tabsize
-execute "set softtabstop=".tabsize
-
-"augroup project
-"	autocmd!
-"	autocmd BufRead,BufNewFile .h,.cpp,*.c set filetype=c.doxygen
-"augroup END
-
-" Set the Search in Files path
-"let &path.="src/include,/usr/include/AL,"
-"
-"set includeexpr=substitute(v:fname,'\\.','/','g')
-"
-
-" Building settings
-"set makeprg=make\ -C\ ../build\ -j9
-" use :make to build the project
-
-" Mapping hot key for start build
-"nnoremap <F4> :make!<cr>
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Highlighting hidden symbols
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -221,18 +154,19 @@ execute "set softtabstop=".tabsize
 " For temporary highlighting whitespaces use
 ":set syntax=whitespace
 ":set list
-":set listchars=eol:¶,tab:>·,trail:~,extends:>,precedes:<
-"":set listchars=eol:¶,tab:>·,trail:~,extends:>,precedes:<,space:-
-nnoremap <F2> :ShowWhiteToggle<CR>
+":set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
 
-"colorscheme koehler
-"colorscheme monochrome
-
-"set t_Co=256
-"set background=dark
-"colorscheme primary
-
-" Doxygen highlights
-let g:load_doxygen_syntax=1
+"nnoremap <F4> :ShowWhiteToggle<CR>
 
 
+"set tabstop=8
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set noexpandtab
+
+" NERDTree
+"nmap <silent> <C-n> :NERDTreeToggle<CR>
+nnoremap <F8> :NERDTreeToggle<CR>
+let NERDTreeWinPos = "left"
+let NERDTreeShowHidden=1
